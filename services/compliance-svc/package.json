@@ -1,0 +1,29 @@
+{
+  "name": "@roadcall/compliance-svc",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@roadcall/types": "workspace:*",
+    "@roadcall/utils": "workspace:*",
+    "@roadcall/aws-clients": "workspace:*",
+    "@aws-sdk/client-dynamodb": "^3.400.0",
+    "@aws-sdk/client-s3": "^3.400.0",
+    "@aws-sdk/client-rds-data": "^3.400.0",
+    "@aws-sdk/lib-dynamodb": "^3.400.0",
+    "@aws-lambda-powertools/logger": "^1.14.0",
+    "@aws-lambda-powertools/tracer": "^1.14.0",
+    "@aws-lambda-powertools/metrics": "^1.14.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.119",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.2.0"
+  }
+}

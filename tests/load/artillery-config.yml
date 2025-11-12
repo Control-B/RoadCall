@@ -1,0 +1,161 @@
+config:
+  target: "{{ $processEnvironment.API_URL }}"
+  phases:
+    # Warm-up phase
+    - duration: 60
+      arrivalRate: 10
+      name: "Warm up"
+    
+    # Ramp-up phase
+    - duration: 120
+      arrivalRate: 10
+      rampTo: 50
+      name: "Ramp up"
+    
+    # Sustained load phase
+    - duration: 300
+      arrivalRate: 100
+      name: "Sustained load - 100 req/s"
+    
+    # Peak load phase
+    - duration: 120
+      arrivalRate: 200
+      name: "Peak load - 200 req/s"
+    
+    # Spike test
+    - duration: 60
+      arrivalRate: 500
+      name: "Spike test - 500 req/s"
+    
+    # Cool down
+    - duration: 60
+      arrivalRate: 10
+      name: "Cool down"
+  
+  processor: "./test-helpers.js"
+  
+  # Performance thresholds
+  ensure:
+    maxErrorRate: 1  # Max 1% error rate
+    p95: 300         # P95 latency < 300ms
+    p99: 500         # P99 latency < 500ms
+  
+  # HTTP settings
+  http:
+    timeout: 10
+    pool: 50
+  
+  # Plugins
+  plugins:
+    expect: {}
+    metrics-by-endpoint: {}
+  
+  # Variables
+  variables:
+    driverIds:
+      - "driver-001"
+      - "driver-002"
+      - "driver-003"
+      - "driver-004"
+      - "driver-005"
+    vendorIds:
+      - "vendor-001"
+      - "vendor-002"
+      - "vendor-003"
+      - "vendor-004"
+      - "vendor-005"
+    incidentTypes:
+      - "tire"
+      - "engine"
+      - "tow"
+
+scenarios:
+  # Scenario 1: Create Incident (40% of traffic)
+  - name: "Create Incident"
+    weight: 40
+    flow:
+      - post:
+          url: "/incidents"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+            Content-Type: "application/json"
+          json:
+            driverId: "{{ $randomString() }}"
+            type: "{{ $randomChoice(incidentTypes) }}"
+            location:
+              lat: "{{ $randomNumber(30, 45) }}"
+              lon: "{{ $randomNumber(-120, -70) }}"
+            description: "Test incident {{ $randomString() }}"
+          capture:
+            - json: "$.incidentId"
+              as: "incidentId"
+          expect:
+            - statusCode: 201
+            - contentType: json
+            - hasProperty: incidentId
+      
+      - think: 2
+      
+      # Get incident details
+      - get:
+          url: "/incidents/{{ incidentId }}"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          expect:
+            - statusCode: 200
+            - contentType: json
+
+  # Scenario 2: Vendor Search (30% of traffic)
+  - name: "Vendor Search"
+    weight: 30
+    flow:
+      - get:
+          url: "/vendors/search"
+          qs:
+            lat: "{{ $randomNumber(30, 45) }}"
+            lon: "{{ $randomNumber(-120, -70) }}"
+            radius: "{{ $randomNumber(25, 100) }}"
+            capability: "{{ $randomChoice(incidentTypes) }}"
+            availableOnly: "true"
+            limit: "10"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: vendors
+
+  # Scenario 3: Get Vendor Profile (20% of traffic)
+  - name: "Get Vendor Profile"
+    weight: 20
+    flow:
+      - get:
+          url: "/vendors/{{ $randomChoice(vendorIds) }}"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: vendor
+
+  # Scenario 4: Location Updates (10% of traffic)
+  - name: "Location Update"
+    weight: 10
+    flow:
+      - post:
+          url: "/tracking/{{ sessionId }}/location"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+            Content-Type: "application/json"
+          json:
+            lat: "{{ $randomNumber(30, 45) }}"
+            lon: "{{ $randomNumber(-120, -70) }}"
+            timestamp: "{{ $timestamp() }}"
+            accuracy: "{{ $randomNumber(5, 20) }}"
+          expect:
+            - statusCode: 200
+
+# After test summary
+after:
+  flow:
+    - log: "Load test completed"

@@ -1,0 +1,33 @@
+{
+  "name": "@roadcall/kb-svc",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@roadcall/types": "workspace:*",
+    "@roadcall/utils": "workspace:*",
+    "@roadcall/aws-clients": "workspace:*",
+    "@aws-sdk/client-s3": "^3.478.0",
+    "@aws-sdk/client-textract": "^3.478.0",
+    "@aws-sdk/client-kendra": "^3.478.0",
+    "@aws-sdk/client-bedrock-runtime": "^3.478.0",
+    "@aws-sdk/s3-request-presigner": "^3.478.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.131",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.10.6",
+    "@types/uuid": "^9.0.7",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.3.3"
+  }
+}

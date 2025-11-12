@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Roadcall Assistant - Test Runner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .controls {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .stats {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-card {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-card.total {
+            background: #f3f4f6;
+        }
+        
+        .stat-card.passed {
+            background: #d1fae5;
+        }
+        
+        .stat-card.failed {
+            background: #fee2e2;
+        }
+        
+        .stat-card.skipped {
+            background: #fef3c7;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .results {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .test-suite {
+            margin-bottom: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .suite-header {
+            padding: 15px;
+            background: #f9fafb;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .suite-header:hover {
+            background: #f3f4f6;
+        }
+        
+        .suite-title {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .suite-status {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-badge.pass {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-badge.fail {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .status-badge.running {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .suite-tests {
+            padding: 15px;
+            display: none;
+        }
+        
+        .suite-tests.expanded {
+            display: block;
+        }
+        
+        .test-item {
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .test-item.pass {
+            background: #f0fdf4;
+        }
+        
+        .test-item.fail {
+            background: #fef2f2;
+        }
+        
+        .test-icon {
+            font-size: 18px;
+        }
+        
+        .test-name {
+            flex: 1;
+        }
+        
+        .test-duration {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .console-output {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        .console-line {
+            margin-bottom: 4px;
+            white-space: pre-wrap;
+        }
+        
+        .console-line.info {
+            color: #60a5fa;
+        }
+        
+        .console-line.success {
+            color: #34d399;
+        }
+        
+        .console-line.error {
+            color: #f87171;
+        }
+        
+        .console-line.warning {
+            color: #fbbf24;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f4f6;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚗 AI Roadcall Assistant - Test Runner</h1>
+            <p>Comprehensive integration and system testing dashboard</p>
+        </div>
+        
+        <div class="controls">
+            <div class="button-group">
+                <button class="btn-primary" onclick="runAllTests()">
+                    ▶️ Run All Tests
+                </button>
+                <button class="btn-success" onclick="runTest('basic-setup')">
+                    ✓ Basic Setup
+                </button>
+                <button class="btn-primary" onclick="runTest('complete-incident-flow')">
+                    🔄 Incident Flow
+                </button>
+                <button class="btn-primary" onclick="runTest('eventbridge-flows')">
+                    📡 EventBridge
+                </button>
+                <button class="btn-warning" onclick="runTest('disaster-recovery')">
+                    🔥 Disaster Recovery
+                </button>
+                <button class="btn-danger" onclick="runTest('security-validation')">
+                    🔒 Security
+                </button>
+                <button class="btn-primary" onclick="runTest('performance-sla')">
+                    ⚡ Performance
+                </button>
+                <button class="btn-secondary" onclick="runTest('audit-compliance')">
+                    📋 Compliance
+                </button>
+                <button class="btn-secondary" onclick="clearResults()">
+                    🗑️ Clear
+                </button>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stats-grid">
+                <div class="stat-card total">
+                    <div class="stat-value" id="stat-total">0</div>
+                    <div class="stat-label">Total Tests</div>
+                </div>
+                <div class="stat-card passed">
+                    <div class="stat-value" id="stat-passed">0</div>
+                    <div class="stat-label">Passed</div>
+                </div>
+                <div class="stat-card failed">
+                    <div class="stat-value" id="stat-failed">0</div>
+                    <div class="stat-label">Failed</div>
+                </div>
+                <div class="stat-card skipped">
+                    <div class="stat-value" id="stat-skipped">0</div>
+                    <div class="stat-label">Skipped</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="results">
+            <h2 style="margin-bottom: 20px;">Test Results</h2>
+            <div id="test-results"></div>
+            <div class="console-output" id="console-output" style="display: none;"></div>
+        </div>
+    </div>
+    
+    <script src="runner.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "name": "@roadcall/infrastructure",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf cdk.out dist",
+    "cdk": "cdk",
+    "deploy": "cdk deploy --all",
+    "deploy:dev": "cdk deploy --all --context stage=dev",
+    "deploy:staging": "cdk deploy --all --context stage=staging",
+    "deploy:prod": "cdk deploy --all --context stage=prod --require-approval never",
+    "synth": "cdk synth",
+    "diff": "cdk diff",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@roadcall/events": "workspace:*",
+    "@roadcall/types": "workspace:*",
+    "aws-cdk-lib": "^2.117.0",
+    "commander": "^14.0.2",
+    "constructs": "^10.3.0",
+    "source-map-support": "^0.5.21"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "aws-cdk": "^2.117.0",
+    "typescript": "^5.3.3"
+  }
+}

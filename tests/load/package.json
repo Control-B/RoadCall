@@ -1,0 +1,23 @@
+{
+  "name": "roadcall-load-tests",
+  "version": "1.0.0",
+  "description": "Load testing suite for AI Roadcall Assistant",
+  "private": true,
+  "scripts": {
+    "setup": "./setup.sh",
+    "test:quick": "./run-load-test.sh dev quick",
+    "test:full": "./run-load-test.sh staging full",
+    "test:incidents": "./run-load-test.sh staging incidents",
+    "test:prod": "./run-load-test.sh prod full"
+  },
+  "devDependencies": {
+    "artillery": "^2.0.0",
+    "artillery-plugin-expect": "^2.0.0",
+    "artillery-plugin-metrics-by-endpoint": "^1.0.0"
+  },
+  "keywords": [
+    "load-testing",
+    "artillery",
+    "performance"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@roadcall/incident-svc",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-location": "^3.478.0",
+    "@aws-sdk/client-sfn": "^3.478.0",
+    "@roadcall/events": "workspace:*",
+    "@roadcall/types": "workspace:*",
+    "@roadcall/utils": "workspace:*",
+    "@roadcall/aws-clients": "workspace:*",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.131",
+    "@types/node": "^20.10.6",
+    "@types/uuid": "^9.0.7",
+    "typescript": "^5.3.3"
+  }
+}

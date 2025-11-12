@@ -1,0 +1,27 @@
+{
+  "name": "@roadcall/admin-config-svc",
+  "version": "1.0.0",
+  "description": "Admin configuration and rules engine service",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@aws-lambda-powertools/logger": "^1.17.0",
+    "@aws-lambda-powertools/tracer": "^1.17.0",
+    "@aws-sdk/client-dynamodb": "^3.490.0",
+    "@aws-sdk/lib-dynamodb": "^3.490.0",
+    "@aws-sdk/util-dynamodb": "^3.490.0",
+    "@roadcall/types": "workspace:*",
+    "@roadcall/utils": "workspace:*",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.130",
+    "@types/node": "^20.10.0",
+    "@types/uuid": "^9.0.7",
+    "typescript": "^5.3.3"
+  }
+}

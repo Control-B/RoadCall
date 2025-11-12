@@ -1,0 +1,41 @@
+{
+  "name": "@roadcall/payments-svc",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.478.0",
+    "@aws-sdk/client-frauddetector": "^3.928.0",
+    "@aws-sdk/client-rds-data": "^3.478.0",
+    "@aws-sdk/client-secrets-manager": "^3.478.0",
+    "@aws-sdk/client-sqs": "^3.478.0",
+    "@aws-sdk/lib-dynamodb": "^3.478.0",
+    "@roadcall/aws-clients": "workspace:*",
+    "@roadcall/events": "workspace:*",
+    "@roadcall/types": "workspace:*",
+    "@roadcall/utils": "workspace:*",
+    "pg": "^8.11.3",
+    "stripe": "^14.10.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.131",
+    "@types/node": "^20.10.6",
+    "@types/pg": "^8.10.9",
+    "@types/uuid": "^9.0.7",
+    "typescript": "^5.3.3"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/__tests__/**/*.test.ts"
+    ]
+  }
+}

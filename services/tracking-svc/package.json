@@ -1,0 +1,31 @@
+{
+  "name": "@roadcall/tracking-svc",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Real-time location tracking service with AppSync GraphQL",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@aws-lambda-powertools/logger": "^1.17.0",
+    "@aws-lambda-powertools/tracer": "^1.17.0",
+    "@aws-sdk/client-dynamodb": "^3.478.0",
+    "@aws-sdk/lib-dynamodb": "^3.478.0",
+    "@aws-sdk/client-location": "^3.478.0",
+    "@aws-sdk/client-eventbridge": "^3.478.0",
+    "@roadcall/events": "workspace:*",
+    "@roadcall/types": "workspace:*",
+    "@roadcall/utils": "workspace:*",
+    "@roadcall/aws-clients": "workspace:*",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.130",
+    "@types/node": "^20.10.0",
+    "@types/uuid": "^9.0.7",
+    "typescript": "^5.3.3"
+  }
+}

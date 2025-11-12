@@ -1,0 +1,29 @@
+{
+  "name": "@roadcall/aws-clients",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.478.0",
+    "@aws-sdk/client-s3": "^3.478.0",
+    "@aws-sdk/client-sns": "^3.478.0",
+    "@aws-sdk/client-sqs": "^3.478.0",
+    "@aws-sdk/client-eventbridge": "^3.478.0",
+    "@aws-sdk/client-secrets-manager": "^3.478.0",
+    "@aws-sdk/lib-dynamodb": "^3.478.0",
+    "@aws-sdk/s3-request-presigner": "^3.478.0",
+    "@roadcall/types": "workspace:*",
+    "@roadcall/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "typescript": "^5.3.3"
+  }
+}

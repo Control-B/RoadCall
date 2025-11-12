@@ -1,0 +1,259 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main, develop, 'release/*']
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - staging
+          - production
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  determine-environment:
+    name: Determine Environment
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.set-env.outputs.environment }}
+      aws-region: ${{ steps.set-env.outputs.aws-region }}
+    steps:
+      - name: Set environment
+        id: set-env
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "environment=${{ inputs.environment }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" == "refs/heads/develop" ]; then
+            echo "environment=dev" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == refs/heads/release/* ]]; then
+            echo "environment=staging" >> $GITHUB_OUTPUT
+          else
+            echo "environment=dev" >> $GITHUB_OUTPUT
+          fi
+          echo "aws-region=us-east-1" >> $GITHUB_OUTPUT
+
+  deploy-dev:
+    name: Deploy to Dev
+    runs-on: ubuntu-latest
+    needs: determine-environment
+    if: needs.determine-environment.outputs.environment == 'dev'
+    environment:
+      name: dev
+      url: ${{ steps.deploy.outputs.api_url }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ needs.determine-environment.outputs.aws-region }}
+          role-session-name: GitHubActions-Deploy-Dev
+
+      - name: Deploy infrastructure
+        id: deploy
+        run: pnpm cdk deploy --all --require-approval never
+        working-directory: infrastructure
+        env:
+          STAGE: dev
+          AWS_REGION: ${{ needs.determine-environment.outputs.aws-region }}
+
+      - name: Run smoke tests
+        run: pnpm test:smoke
+        env:
+          API_URL: ${{ steps.deploy.outputs.api_url }}
+          STAGE: dev
+
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: determine-environment
+    if: needs.determine-environment.outputs.environment == 'staging'
+    environment:
+      name: staging
+      url: ${{ steps.deploy.outputs.api_url }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ needs.determine-environment.outputs.aws-region }}
+          role-session-name: GitHubActions-Deploy-Staging
+
+      - name: Deploy infrastructure
+        id: deploy
+        run: pnpm cdk deploy --all --require-approval never
+        working-directory: infrastructure
+        env:
+          STAGE: staging
+          AWS_REGION: ${{ needs.determine-environment.outputs.aws-region }}
+
+      - name: Run integration tests
+        run: pnpm test:integration
+        env:
+          API_URL: ${{ steps.deploy.outputs.api_url }}
+          STAGE: staging
+
+      - name: Run E2E tests
+        run: pnpm test:e2e
+        env:
+          API_URL: ${{ steps.deploy.outputs.api_url }}
+          STAGE: staging
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: determine-environment
+    if: needs.determine-environment.outputs.environment == 'production'
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.api_url }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ needs.determine-environment.outputs.aws-region }}
+          role-session-name: GitHubActions-Deploy-Production
+
+      - name: Deploy infrastructure
+        id: deploy
+        run: pnpm cdk deploy --all --require-approval never
+        working-directory: infrastructure
+        env:
+          STAGE: prod
+          AWS_REGION: ${{ needs.determine-environment.outputs.aws-region }}
+
+      - name: Run smoke tests
+        run: pnpm test:smoke
+        env:
+          API_URL: ${{ steps.deploy.outputs.api_url }}
+          STAGE: prod
+
+      - name: Verify deployment health
+        run: |
+          echo "Checking API health..."
+          response=$(curl -s -o /dev/null -w "%{http_code}" ${{ steps.deploy.outputs.api_url }}/health)
+          if [ $response -ne 200 ]; then
+            echo "Health check failed with status $response"
+            exit 1
+          fi
+          echo "Health check passed"
+
+  rollback:
+    name: Rollback on Failure
+    runs-on: ubuntu-latest
+    needs: [deploy-dev, deploy-staging, deploy-production]
+    if: failure()
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+          role-session-name: GitHubActions-Rollback
+
+      - name: Rollback deployment
+        run: |
+          echo "Rolling back to previous version..."
+          # Get the previous successful deployment
+          PREVIOUS_VERSION=$(git rev-parse HEAD~1)
+          git checkout $PREVIOUS_VERSION
+          pnpm install --frozen-lockfile
+          pnpm cdk deploy --all --require-approval never
+        working-directory: infrastructure
+
+      - name: Notify team
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "🚨 Deployment failed and was rolled back",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Deployment Rollback*\n\nDeployment to ${{ needs.determine-environment.outputs.environment }} failed and was automatically rolled back.\n\n*Commit:* ${{ github.sha }}\n*Author:* ${{ github.actor }}\n*Branch:* ${{ github.ref_name }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

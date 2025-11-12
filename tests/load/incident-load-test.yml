@@ -1,0 +1,116 @@
+config:
+  target: "{{ $processEnvironment.API_URL }}"
+  phases:
+    # Warm-up
+    - duration: 30
+      arrivalRate: 10
+      name: "Warm up"
+    
+    # Ramp to 1000 concurrent incidents
+    - duration: 60
+      arrivalRate: 100
+      rampTo: 1000
+      name: "Ramp to 1000 concurrent"
+    
+    # Sustain 1000 concurrent
+    - duration: 300
+      arrivalRate: 1000
+      name: "Sustain 1000 concurrent incidents"
+    
+    # Cool down
+    - duration: 30
+      arrivalRate: 10
+      name: "Cool down"
+  
+  processor: "./test-helpers.js"
+  
+  # Performance thresholds for incident creation
+  ensure:
+    maxErrorRate: 2      # Max 2% error rate under load
+    p95: 5000            # P95 < 5 seconds for incident creation
+    p99: 10000           # P99 < 10 seconds
+  
+  http:
+    timeout: 15
+    pool: 100
+  
+  plugins:
+    expect: {}
+    metrics-by-endpoint:
+      stripQueryString: true
+  
+  variables:
+    incidentTypes:
+      - "tire"
+      - "engine"
+      - "tow"
+
+scenarios:
+  # Main scenario: Create incident and track lifecycle
+  - name: "Incident Lifecycle"
+    weight: 100
+    flow:
+      # 1. Create incident
+      - post:
+          url: "/incidents"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+            Content-Type: "application/json"
+          json:
+            driverId: "driver-{{ $randomString() }}"
+            type: "{{ $randomChoice(incidentTypes) }}"
+            location:
+              lat: "{{ $randomLat() }}"
+              lon: "{{ $randomLon() }}"
+            description: "Load test incident"
+            phone: "+1555{{ $randomNumber(1000000, 9999999) }}"
+          capture:
+            - json: "$.incidentId"
+              as: "incidentId"
+          expect:
+            - statusCode: 201
+            - contentType: json
+            - hasProperty: incidentId
+      
+      # 2. Wait for vendor matching (simulate processing time)
+      - think: 5
+      
+      # 3. Check incident status
+      - get:
+          url: "/incidents/{{ incidentId }}"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          expect:
+            - statusCode: 200
+            - contentType: json
+      
+      # 4. Simulate vendor search triggered by matching
+      - get:
+          url: "/vendors/search"
+          qs:
+            lat: "{{ $randomLat() }}"
+            lon: "{{ $randomLon() }}"
+            radius: "50"
+            capability: "{{ $randomChoice(incidentTypes) }}"
+            availableOnly: "true"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          expect:
+            - statusCode: 200
+      
+      # 5. Wait for offer acceptance
+      - think: 3
+      
+      # 6. Check incident status again
+      - get:
+          url: "/incidents/{{ incidentId }}"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          expect:
+            - statusCode: 200
+
+# Custom metrics to track
+after:
+  flow:
+    - log: "Incident load test completed"
+    - log: "Check metrics for incident creation performance"

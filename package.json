@@ -1,0 +1,38 @@
+{
+  "name": "ai-roadcall-assistant",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI-powered roadside assistance platform connecting drivers with service vendors",
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*",
+    "infrastructure"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "test:e2e": "cd tests/e2e && pnpm test",
+    "test:integration": "turbo run test:integration",
+    "test:smoke": "bash tests/smoke/smoke-tests.sh",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "typecheck": "turbo run typecheck"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.16.0",
+    "@typescript-eslint/parser": "^6.16.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.1.0",
+    "turbo": "^1.11.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
+  }
+}

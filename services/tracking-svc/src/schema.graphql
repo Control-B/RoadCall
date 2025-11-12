@@ -1,0 +1,82 @@
+type TrackingSession {
+  sessionId: ID!
+  incidentId: ID!
+  driverId: ID!
+  vendorId: ID!
+  status: TrackingStatus!
+  driverLocation: Location!
+  vendorLocation: Location!
+  vendorPath: [Location!]!
+  route: [RouteSegment!]!
+  eta: ETA!
+  geofenceId: String!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Location {
+  lat: Float!
+  lon: Float!
+  timestamp: AWSDateTime
+  accuracy: Float
+  speed: Float
+  heading: Float
+}
+
+type RouteSegment {
+  startLat: Float!
+  startLon: Float!
+  endLat: Float!
+  endLon: Float!
+  distance: Float!
+  duration: Float!
+}
+
+type ETA {
+  minutes: Int!
+  distanceMiles: Float!
+  arrivalTime: AWSDateTime!
+  confidence: Float!
+  calculatedAt: AWSDateTime!
+}
+
+enum TrackingStatus {
+  ACTIVE
+  ARRIVED
+  COMPLETED
+  CANCELLED
+}
+
+input LocationInput {
+  lat: Float!
+  lon: Float!
+  timestamp: AWSDateTime
+  accuracy: Float
+  speed: Float
+  heading: Float
+}
+
+type Mutation {
+  startTracking(incidentId: ID!): TrackingSession!
+  updateVendorLocation(sessionId: ID!, location: LocationInput!): TrackingSession!
+  stopTracking(sessionId: ID!): TrackingSession!
+}
+
+type Query {
+  getTrackingSession(sessionId: ID!): TrackingSession
+  getActiveSessionByIncident(incidentId: ID!): TrackingSession
+}
+
+type Subscription {
+  onTrackingUpdate(sessionId: ID!): TrackingSession
+    @aws_subscribe(mutations: ["updateVendorLocation"])
+  
+  onIncidentTracking(incidentId: ID!): TrackingSession
+    @aws_subscribe(mutations: ["updateVendorLocation", "startTracking", "stopTracking"])
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
