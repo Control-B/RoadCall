@@ -16,7 +16,6 @@ import { Incident } from '../../src/types';
 export default function IncidentsScreen() {
   const { user } = useAuthStore();
   const { incidents, setIncidents } = useIncidentStore();
-  const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -26,14 +25,14 @@ export default function IncidentsScreen() {
   const loadIncidents = async () => {
     if (!user) return;
 
-    setLoading(true);
+  // loading state removed
     try {
       const data = await getDriverIncidents(user.userId);
       setIncidents(data);
     } catch (error) {
       console.error('Failed to load incidents:', error);
     } finally {
-      setLoading(false);
+      // no-op
     }
   };
 

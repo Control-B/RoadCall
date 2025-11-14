@@ -1,6 +1,7 @@
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
 import appsyncClient, { UPDATE_VENDOR_LOCATION } from '../config/appsync-client';
+import gql from 'graphql-tag';
 
 const LOCATION_TASK_NAME = 'background-location-task';
 
@@ -23,7 +24,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
         if (sessionId) {
           // Update vendor location via AppSync
           await appsyncClient.mutate({
-            mutation: UPDATE_VENDOR_LOCATION,
+            mutation: gql(UPDATE_VENDOR_LOCATION),
             variables: {
               sessionId,
               location: {
@@ -112,7 +113,7 @@ export const stopBackgroundLocationTracking = async (): Promise<void> => {
 
 export const watchPosition = (
   callback: (location: Location.LocationObject) => void
-): Location.LocationSubscription => {
+): Promise<Location.LocationSubscription> => {
   return Location.watchPositionAsync(
     {
       accuracy: Location.Accuracy.High,

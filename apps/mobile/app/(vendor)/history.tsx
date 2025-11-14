@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -12,10 +12,9 @@ import { useAuthStore } from '../../src/store/auth-store';
 import { getVendorOffers } from '../../src/services/api';
 import { Offer } from '../../src/types';
 
-export default function HistoryScreen() {
+export default function HistoryScreen(): React.JSX.Element {
   const { user } = useAuthStore();
   const [history, setHistory] = useState<Offer[]>([]);
-  const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -25,7 +24,7 @@ export default function HistoryScreen() {
   const loadHistory = async () => {
     if (!user) return;
 
-    setLoading(true);
+  // removed loading state
     try {
       // Get accepted and completed offers
       const accepted = await getVendorOffers(user.userId, 'accepted');
@@ -38,7 +37,7 @@ export default function HistoryScreen() {
     } catch (error) {
       console.error('Failed to load history:', error);
     } finally {
-      setLoading(false);
+      // no-op
     }
   };
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -16,10 +16,9 @@ import { useVendorStore } from '../../src/store/vendor-store';
 import { getVendorOffers, acceptOffer, declineOffer } from '../../src/services/api';
 import { Offer } from '../../src/types';
 
-export default function VendorHomeScreen() {
+export default function VendorHomeScreen(): React.JSX.Element {
   const { user } = useAuthStore();
   const { offers, setOffers, updateOffer } = useVendorStore();
-  const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [processingOffer, setProcessingOffer] = useState<string | null>(null);
 
@@ -30,14 +29,14 @@ export default function VendorHomeScreen() {
   const loadOffers = async () => {
     if (!user) return;
 
-    setLoading(true);
+  // removed loading state
     try {
       const data = await getVendorOffers(user.userId, 'pending');
       setOffers(data);
     } catch (error) {
       console.error('Failed to load offers:', error);
     } finally {
-      setLoading(false);
+      // no-op
     }
   };
 

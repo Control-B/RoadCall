@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
-export default function LandingScreen() {
+import React from 'react';
+export default function LandingScreen(): React.JSX.Element {
   const router = useRouter();
 
   return (

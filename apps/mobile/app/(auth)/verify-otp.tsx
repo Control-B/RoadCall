@@ -12,9 +12,12 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { verifyOTP, resendOTP, getCurrentUserInfo } from '../../src/services/auth';
 import { useAuthStore } from '../../src/store/auth-store';
 
-export default function VerifyOTPScreen() {
+import React from 'react';
+export default function VerifyOTPScreen(): React.JSX.Element {
   const router = useRouter();
-  const { phone, role } = useLocalSearchParams<{ phone: string; role: string }>();
+  const { phone: rawPhone, role: rawRole } = useLocalSearchParams<{ phone?: string; role?: string }>();
+  const phone = rawPhone ?? '';
+  const role = rawRole ?? 'driver';
   const { setUser } = useAuthStore();
 
   const [otp, setOtp] = useState('');

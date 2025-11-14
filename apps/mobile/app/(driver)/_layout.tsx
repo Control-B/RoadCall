@@ -1,12 +1,25 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { Platform } from 'react-native';
 
+// Driver tab layout updated per requirement: Home, Find, Analysis, More
+// Styling inspired by landing page (dark background + accent colors)
 export default function DriverLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#007AFF',
         headerShown: false,
+        tabBarActiveTintColor: '#60A5FA', // blue-400
+        tabBarInactiveTintColor: '#9CA3AF', // gray-400
+        tabBarStyle: {
+          backgroundColor: '#000',
+          borderTopColor: '#1F2937',
+          paddingTop: 4,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+        },
       }}
     >
       <Tabs.Screen
@@ -14,34 +27,34 @@ export default function DriverLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color} />
+            <Ionicons name={Platform.OS === 'ios' ? 'home-outline' : 'home'} size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="incidents"
+        name="find"
         options={{
-          title: 'Incidents',
+          title: 'Find',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="list" size={size} color={color} />
+            <Ionicons name={Platform.OS === 'ios' ? 'map-outline' : 'map'} size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="tracking"
+        name="analysis"
         options={{
-          title: 'Tracking',
+          title: 'Analysis',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="navigate" size={size} color={color} />
+            <Ionicons name={Platform.OS === 'ios' ? 'analytics-outline' : 'stats-chart'} size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="more"
         options={{
-          title: 'Profile',
+          title: 'More',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color} />
+            <Ionicons name={Platform.OS === 'ios' ? 'ellipsis-horizontal' : 'menu'} size={size} color={color} />
           ),
         }}
       />

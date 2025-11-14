@@ -9,8 +9,10 @@ import {
 import MapView, { Marker, Polyline, PROVIDER_DEFAULT } from 'react-native-maps';
 import { useIncidentStore } from '../../src/store/incident-store';
 import appsyncClient, { ON_INCIDENT_TRACKING } from '../../src/config/appsync-client';
+import gql from 'graphql-tag';
 
-export default function TrackingScreen() {
+import React from 'react';
+export default function TrackingScreen(): React.JSX.Element {
   const { activeIncident, trackingSession, setTrackingSession, updateTrackingSession } =
     useIncidentStore();
   const [loading, setLoading] = useState(true);
@@ -33,7 +35,7 @@ export default function TrackingScreen() {
     try {
       const subscription = appsyncClient
         .subscribe({
-          query: ON_INCIDENT_TRACKING,
+          query: gql(ON_INCIDENT_TRACKING),
           variables: {
             incidentId: activeIncident?.incidentId,
           },

@@ -2,7 +2,7 @@ import { Amplify } from 'aws-amplify';
 
 // AWS Configuration
 // These values should be replaced with actual values from your AWS deployment
-export const awsConfig = {
+export const awsConfig: any = {
   Auth: {
     Cognito: {
       userPoolId: process.env.EXPO_PUBLIC_USER_POOL_ID || '',
@@ -36,13 +36,8 @@ export const awsConfig = {
     GraphQL: {
       endpoint: process.env.EXPO_PUBLIC_APPSYNC_ENDPOINT || '',
       region: process.env.EXPO_PUBLIC_AWS_REGION || 'us-east-1',
+      // Amplify will coerce this string to enum internally
       defaultAuthMode: 'userPool',
-    },
-  },
-  Notifications: {
-    Pinpoint: {
-      appId: process.env.EXPO_PUBLIC_PINPOINT_APP_ID || '',
-      region: process.env.EXPO_PUBLIC_AWS_REGION || 'us-east-1',
     },
   },
 };

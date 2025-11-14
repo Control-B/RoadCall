@@ -1,7 +1,7 @@
 import { AWSAppSyncClient, AUTH_TYPE } from 'aws-appsync';
 import { fetchAuthSession } from 'aws-amplify/auth';
 
-const client = new AWSAppSyncClient({
+const client: AWSAppSyncClient<any> = new AWSAppSyncClient({
   url: process.env.EXPO_PUBLIC_APPSYNC_ENDPOINT || '',
   region: process.env.EXPO_PUBLIC_AWS_REGION || 'us-east-1',
   auth: {

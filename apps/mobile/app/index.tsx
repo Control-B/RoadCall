@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import React from 'react';
 import { Redirect } from 'expo-router';
 import { View, ActivityIndicator } from 'react-native';
 import { useAuthStore } from '../src/store/auth-store';
 
-export default function Index() {
+export default function Index(): React.JSX.Element {
   const { user, isAuthenticated, isLoading } = useAuthStore();
 
   if (isLoading) {

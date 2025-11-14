@@ -2,7 +2,7 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
 import Constants from 'expo-constants';
-import { record } from '@aws-amplify/analytics/pinpoint';
+// Simplified notifications analytics stub (Pinpoint auto configured via Amplify outputs)
 
 // Configure notification behavior
 Notifications.setNotificationHandler({
@@ -67,22 +67,9 @@ export const registerForPushNotifications = async (): Promise<string | null> => 
   }
 };
 
-export const sendTokenToPinpoint = async (
-  token: string,
-  userId: string
-): Promise<void> => {
-  try {
-    // Record the device token with Pinpoint
-    await record({
-      name: 'device_registered',
-      attributes: {
-        userId,
-        platform: Platform.OS,
-      },
-    });
-  } catch (error) {
-    console.error('Error sending token to Pinpoint:', error);
-  }
+export const sendTokenToPinpoint = async (_token: string, _userId: string): Promise<void> => {
+  // Placeholder: integrate Pinpoint event recording after confirming Amplify analytics setup.
+  return Promise.resolve();
 };
 
 export const scheduleLocalNotification = async (

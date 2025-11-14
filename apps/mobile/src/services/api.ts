@@ -1,4 +1,4 @@
-import { get, post, patch, del } from 'aws-amplify/api';
+import { get, post, patch } from 'aws-amplify/api';
 import { Incident, Offer, Payment } from '../types';
 
 const API_NAME = 'RoadcallAPI';
@@ -15,7 +15,7 @@ export const createIncident = async (data: {
       body: data,
     },
   }).response;
-  return (await response.body.json()) as Incident;
+  return (await response.body.json()) as unknown as Incident;
 };
 
 export const getIncident = async (incidentId: string): Promise<Incident> => {
@@ -23,7 +23,7 @@ export const getIncident = async (incidentId: string): Promise<Incident> => {
     apiName: API_NAME,
     path: `/incidents/${incidentId}`,
   }).response;
-  return (await response.body.json()) as Incident;
+  return (await response.body.json()) as unknown as Incident;
 };
 
 export const getDriverIncidents = async (
@@ -38,7 +38,7 @@ export const getDriverIncidents = async (
     apiName: API_NAME,
     path: `/incidents?${queryParams.toString()}`,
   }).response;
-  return (await response.body.json()) as Incident[];
+  return (await response.body.json()) as unknown as Incident[];
 };
 
 export const updateIncidentStatus = async (
@@ -52,7 +52,7 @@ export const updateIncidentStatus = async (
       body: { status },
     },
   }).response;
-  return (await response.body.json()) as Incident;
+  return (await response.body.json()) as unknown as Incident;
 };
 
 export const uploadIncidentMedia = async (
@@ -66,7 +66,7 @@ export const uploadIncidentMedia = async (
       body: mediaData,
     },
   }).response;
-  return (await response.body.json()) as { mediaId: string; url: string };
+  return (await response.body.json()) as unknown as { mediaId: string; url: string };
 };
 
 // Offer APIs
@@ -75,7 +75,7 @@ export const getOffer = async (offerId: string): Promise<Offer> => {
     apiName: API_NAME,
     path: `/offers/${offerId}`,
   }).response;
-  return (await response.body.json()) as Offer;
+  return (await response.body.json()) as unknown as Offer;
 };
 
 export const getVendorOffers = async (
@@ -90,7 +90,7 @@ export const getVendorOffers = async (
     apiName: API_NAME,
     path: `/offers?${queryParams.toString()}`,
   }).response;
-  return (await response.body.json()) as Offer[];
+  return (await response.body.json()) as unknown as Offer[];
 };
 
 export const acceptOffer = async (offerId: string): Promise<Offer> => {
@@ -98,7 +98,7 @@ export const acceptOffer = async (offerId: string): Promise<Offer> => {
     apiName: API_NAME,
     path: `/offers/${offerId}/accept`,
   }).response;
-  return (await response.body.json()) as Offer;
+  return (await response.body.json()) as unknown as Offer;
 };
 
 export const declineOffer = async (
@@ -109,10 +109,10 @@ export const declineOffer = async (
     apiName: API_NAME,
     path: `/offers/${offerId}/decline`,
     options: {
-      body: { reason },
+      body: reason ? { reason } : undefined,
     },
   }).response;
-  return (await response.body.json()) as Offer;
+  return (await response.body.json()) as unknown as Offer;
 };
 
 // Payment APIs
@@ -121,7 +121,7 @@ export const getPayment = async (paymentId: string): Promise<Payment> => {
     apiName: API_NAME,
     path: `/payments/${paymentId}`,
   }).response;
-  return (await response.body.json()) as Payment;
+  return (await response.body.json()) as unknown as Payment;
 };
 
 export const getIncidentPayments = async (
@@ -131,11 +131,11 @@ export const getIncidentPayments = async (
     apiName: API_NAME,
     path: `/payments?incidentId=${incidentId}`,
   }).response;
-  return (await response.body.json()) as Payment[];
+  return (await response.body.json()) as unknown as Payment[];
 };
 
 // Driver APIs
-export const getDriverProfile = async (driverId: string) => {
+export const getDriverProfile = async (driverId: string): Promise<any> => {
   const response = await get({
     apiName: API_NAME,
     path: `/drivers/${driverId}`,
@@ -146,7 +146,7 @@ export const getDriverProfile = async (driverId: string) => {
 export const updateDriverPreferences = async (
   driverId: string,
   preferences: any
-) => {
+): Promise<any> => {
   const response = await patch({
     apiName: API_NAME,
     path: `/drivers/${driverId}/preferences`,
@@ -158,7 +158,7 @@ export const updateDriverPreferences = async (
 };
 
 // Vendor APIs
-export const getVendorProfile = async (vendorId: string) => {
+export const getVendorProfile = async (vendorId: string): Promise<any> => {
   const response = await get({
     apiName: API_NAME,
     path: `/vendors/${vendorId}`,
@@ -169,7 +169,7 @@ export const getVendorProfile = async (vendorId: string) => {
 export const updateVendorAvailability = async (
   vendorId: string,
   status: 'available' | 'busy' | 'offline'
-) => {
+): Promise<any> => {
   const response = await patch({
     apiName: API_NAME,
     path: `/vendors/${vendorId}/availability`,

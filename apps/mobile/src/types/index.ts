@@ -32,6 +32,7 @@ export interface User {
   email?: string;
   companyId?: string;
   truckNumber?: string;
+  companyName?: string;
 }
 
 export interface Incident {
