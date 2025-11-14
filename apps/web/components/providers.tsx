@@ -2,13 +2,22 @@
 
 import { useEffect } from 'react'
 import { ApolloProvider } from '@apollo/client'
-import { configureAmplify } from '@/lib/aws-config'
+import { configureAmplify, awsConfig } from '@/lib/aws-config'
 import { apolloClient } from '@/lib/graphql-client'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    configureAmplify()
+    // Only configure Amplify if environment variables are set
+    if (process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID) {
+      configureAmplify()
+    }
   }, [])
 
-  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
+  // Only use Apollo Provider if AppSync is configured
+  if (awsConfig.appSyncUrl) {
+    return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
+  }
+
+  // Return children without Apollo Provider if not configured
+  return <>{children}</>
 }

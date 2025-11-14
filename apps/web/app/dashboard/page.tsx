@@ -68,7 +68,7 @@ export default function DriverDashboard() {
       id: '1',
       date: new Date(),
       incidentType: 'Tire Blowout',
-      summary: 'Driver reported flat tire on I-95 northbound near mile marker 120. Urgent situation, blocking right lane. Dispatched tire service, ETA 15 minutes.',
+      summary: 'Driver called in reporting flat tire on I-95 northbound near mile marker 120. AI extracted location and urgency. Nearest tire service provider notified and accepted job with 15-minute ETA.',
       sentiment: 'frustrated',
       urgency: 'high',
       duration: '3:45'
@@ -77,7 +77,7 @@ export default function DriverDashboard() {
       id: '2',
       date: new Date(Date.now() - 86400000),
       incidentType: 'Engine Overheating',
-      summary: 'Engine temperature warning light came on. Driver pulled over at rest stop. Mechanic dispatched to check coolant levels and diagnose issue.',
+      summary: 'Inbound call: Engine temperature warning light activated. AI confirmed driver safely pulled over at rest stop. Qualified mechanic dispatched to diagnose cooling system issue.',
       sentiment: 'calm',
       urgency: 'medium',
       duration: '2:20'
@@ -86,7 +86,7 @@ export default function DriverDashboard() {
       id: '3',
       date: new Date(Date.now() - 172800000),
       incidentType: 'Towing Request',
-      summary: 'Vehicle won\'t start after delivery. Battery appears dead. Tow truck dispatched to transport to nearest service center.',
+      summary: 'Call received: Vehicle won\'t start after delivery. AI identified dead battery as likely cause. Nearest tow company alerted and accepted transport to service center.',
       sentiment: 'neutral',
       urgency: 'medium',
       duration: '4:10'
@@ -106,17 +106,15 @@ export default function DriverDashboard() {
       {/* Header with Create Button */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Driver Dashboard</h2>
+          <h2 className="text-3xl font-bold tracking-tight">Dispatch Dashboard</h2>
           <p className="text-muted-foreground">
-            Track incidents, view analytics, and review call summaries
+            Monitor AI call center activity, track incidents, and review call transcripts
           </p>
         </div>
-        <Link href="/driver/create-incident">
-          <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-            <Plus className="w-5 h-5 mr-2" />
-            New Incident
-          </Button>
-        </Link>
+        <Button size="lg" className="bg-green-600 hover:bg-green-700">
+          <Phone className="w-5 h-5 mr-2" />
+          Call Roadside Support
+        </Button>
       </div>
 
       {/* Two Column Layout */}
@@ -125,25 +123,25 @@ export default function DriverDashboard() {
         {/* Left Column: Analytics */}
         <div className="space-y-6">
           <div className="grid grid-cols-2 gap-4">
-            {/* Total Incidents - Blue */}
+            {/* Total Calls - Blue */}
             <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white border-0">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-2">
-                  <TrendingUp className="w-8 h-8 opacity-80" />
+                  <Phone className="w-8 h-8 opacity-80" />
                 </div>
-                <p className="text-sm opacity-90 mb-1">Total Incidents</p>
+                <p className="text-sm opacity-90 mb-1">Total Calls</p>
                 <p className="text-4xl font-bold mb-1">{analytics.totalIncidents}</p>
                 <p className="text-xs opacity-80">↑ {analytics.thisMonth} this month</p>
               </CardContent>
             </Card>
 
-            {/* Avg Response - Green */}
+            {/* Avg Dispatch Time - Green */}
             <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white border-0">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-2">
                   <Clock className="w-8 h-8 opacity-80" />
                 </div>
-                <p className="text-sm opacity-90 mb-1">Avg Response</p>
+                <p className="text-sm opacity-90 mb-1">Avg Dispatch</p>
                 <p className="text-4xl font-bold mb-1">{analytics.avgResponseTime}</p>
                 <p className="text-xs opacity-80">↓ 5% faster</p>
               </CardContent>
@@ -161,15 +159,15 @@ export default function DriverDashboard() {
               </CardContent>
             </Card>
 
-            {/* Active Now - Orange */}
+            {/* Active Dispatches - Orange */}
             <Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white border-0">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-2">
                   <Wrench className="w-8 h-8 opacity-80" />
                 </div>
-                <p className="text-sm opacity-90 mb-1">Active Now</p>
+                <p className="text-sm opacity-90 mb-1">Active Dispatches</p>
                 <p className="text-4xl font-bold mb-1">{activeIncidents.length}</p>
-                <p className="text-xs opacity-80">In progress</p>
+                <p className="text-xs opacity-80">Providers en route</p>
               </CardContent>
             </Card>
           </div>
@@ -179,9 +177,9 @@ export default function DriverDashboard() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Wrench className="w-5 h-5" />
-                <span>Active Incidents</span>
+                <span>Active Dispatches</span>
               </CardTitle>
-              <CardDescription>Currently in progress</CardDescription>
+              <CardDescription>Providers en route or working</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               {activeIncidents.length === 0 ? (
@@ -206,7 +204,7 @@ export default function DriverDashboard() {
                       {incident.assignedVendorName && (
                         <div className="flex items-center text-sm text-muted-foreground">
                           <Clock className="w-3 h-3 mr-1" />
-                          Vendor: {incident.assignedVendorName}
+                          Provider: {incident.assignedVendorName}
                         </div>
                       )}
                     </div>
@@ -223,9 +221,9 @@ export default function DriverDashboard() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Phone className="w-5 h-5" />
-                <span>Call Summaries</span>
+                <span>Recent Call Transcripts</span>
               </CardTitle>
-              <CardDescription>AI-generated summaries of your calls</CardDescription>
+              <CardDescription>AI-transcribed and summarized driver calls</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {callSummaries.map((call, index) => {
@@ -276,14 +274,20 @@ export default function DriverDashboard() {
             <CardContent className="space-y-2">
               <Link href="/driver/incidents">
                 <Button variant="outline" className="w-full justify-start bg-white hover:bg-gray-50">
-                  <Wrench className="w-4 h-4 mr-2 text-blue-600" />
-                  View All Incidents
+                  <FileText className="w-4 h-4 mr-2 text-blue-600" />
+                  View All Call Transcripts
                 </Button>
               </Link>
               <Button variant="outline" className="w-full justify-start bg-white hover:bg-gray-50">
                 <Phone className="w-4 h-4 mr-2 text-green-600" />
-                Call Dispatch Center
+                Call AI Dispatch Center
               </Button>
+              <Link href="/test-call-center">
+                <Button variant="outline" className="w-full justify-start bg-white hover:bg-gray-50">
+                  <Phone className="w-4 h-4 mr-2 text-purple-600" />
+                  Test Call Center
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>

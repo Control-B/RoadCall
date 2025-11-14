@@ -11,7 +11,7 @@ const httpLink = new HttpLink({
   },
 })
 
-const wsLink = typeof window !== 'undefined' ? new GraphQLWsLink(
+const wsLink = typeof window !== 'undefined' && awsConfig.appSyncUrl ? new GraphQLWsLink(
   createClient({
     url: awsConfig.appSyncUrl.replace('https://', 'wss://').replace('/graphql', '/realtime'),
     connectionParams: {

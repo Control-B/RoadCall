@@ -15,7 +15,7 @@ export default function Index() {
   }
 
   if (!isAuthenticated || !user) {
-    return <Redirect href="/(auth)/welcome" />;
+    return <Redirect href="/(auth)/landing" />;
   }
 
   // Redirect based on user role
@@ -25,5 +25,5 @@ export default function Index() {
     return <Redirect href="/(vendor)/home" />;
   }
 
-  return <Redirect href="/(auth)/welcome" />;
+  return <Redirect href="/(auth)/landing" />;
 }

@@ -16,11 +16,8 @@ export default function LandingPage() {
         <div className="container mx-auto px-6 py-4 relative z-10">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="relative w-8 h-8">
-                <div className="absolute inset-0 bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 opacity-80 blur-sm" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}></div>
-                <div className="absolute inset-0 bg-gradient-to-br from-yellow-300 to-orange-400 flex items-center justify-center" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}>
-                  <span className="text-xs font-bold text-gray-900 mt-1">AI</span>
-                </div>
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-xl">🚛</span>
               </div>
               <span className="text-2xl font-bold text-white">RoadCall</span>
             </Link>
@@ -43,7 +40,7 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section - Stability.ai Style */}
-      <section className="relative overflow-hidden bg-black text-white py-16 md:py-24">
+      <section className="relative overflow-hidden bg-black text-white py-32 md:py-48">
         {/* Animated gradient background */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-purple-600/20 to-pink-600/20"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]"></div>
@@ -56,24 +53,24 @@ export default function LandingPage() {
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8">
               <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-              <span className="text-sm font-medium">AI Call Center • 24/7 Dispatch</span>
+              <span className="text-sm font-medium">AI-Powered Roadside Assistance</span>
             </div>
 
             {/* Main Headline */}
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight">
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                One Call
+                Instant Help
               </span>
               <br />
               <span className="text-white">
-                Instant Roadside Help
+                When You Need It Most
               </span>
             </h1>
 
             {/* Subheadline */}
             <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-              AI call center that instantly connects stranded drivers with qualified mechanics and tow companies. 
-              Just call, speak naturally, and help is on the way.
+              AI-powered dispatch connecting 500+ trucking fleets with mechanics in seconds. 
+              Real-time tracking, smart matching, and automated billing.
             </p>
 
             {/* CTA Buttons */}
@@ -94,27 +91,27 @@ export default function LandingPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
               <div className="text-center">
                 <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
-                  24/7
+                  500+
                 </div>
-                <div className="text-sm text-gray-400">AI Call Center</div>
+                <div className="text-sm text-gray-400">Trucking Companies</div>
               </div>
               <div className="text-center">
                 <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
                   50K+
                 </div>
-                <div className="text-sm text-gray-400">Calls Handled</div>
+                <div className="text-sm text-gray-400">Trucks Serviced</div>
               </div>
               <div className="text-center">
                 <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-400 to-red-400 bg-clip-text text-transparent mb-2">
-                  &lt;2min
+                  15min
                 </div>
-                <div className="text-sm text-gray-400">Avg Call Time</div>
+                <div className="text-sm text-gray-400">Avg Response</div>
               </div>
               <div className="text-center">
                 <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent mb-2">
-                  15min
+                  98%
                 </div>
-                <div className="text-sm text-gray-400">Avg Dispatch</div>
+                <div className="text-sm text-gray-400">Uptime SLA</div>
               </div>
             </div>
           </div>
@@ -144,26 +141,26 @@ export default function LandingPage() {
         <div className="container mx-auto px-6">
           <div className="max-w-3xl mb-16 mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              AI call center that works 24/7
+              Complete fleet incident management
             </h2>
             <p className="text-xl text-gray-600">
-              Drivers call one number. AI handles everything from transcription to dispatch to billing.
+              AI dispatch, real-time tracking, and automated billing in one platform.
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="overflow-hidden border hover:shadow-lg transition-shadow">
               <div className="h-48 relative overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=800&auto=format&fit=crop&q=80" 
-                  alt="Call Center Headset"
+                  src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop&q=80" 
+                  alt="AI Technology"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-blue-900/60 to-transparent"></div>
               </div>
               <div className="p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">AI Call Center</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">AI Dispatch</h3>
                 <p className="text-gray-600">
-                  Drivers call one number. AI transcribes, understands the issue, and creates incidents automatically.
+                  Intelligent matching algorithm connects drivers with the best service provider in seconds.
                 </p>
               </div>
             </Card>
@@ -188,16 +185,16 @@ export default function LandingPage() {
             <Card className="overflow-hidden border hover:shadow-lg transition-shadow">
               <div className="h-48 relative overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&auto=format&fit=crop&q=80" 
-                  alt="Mobile Dispatch Notification"
+                  src="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?w=800&auto=format&fit=crop&q=80" 
+                  alt="Voice Communication"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-purple-900/60 to-transparent"></div>
               </div>
               <div className="p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Smart Dispatch</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Voice Integration</h3>
                 <p className="text-gray-600">
-                  AI finds the nearest qualified mechanic or tow company and sends them a job offer instantly.
+                  Drivers can call in and AI automatically creates incidents with transcription and summarization.
                 </p>
               </div>
             </Card>
@@ -262,39 +259,39 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                AI Call Center That Never Sleeps
+                Instant AI Dispatch
               </h2>
               <p className="text-xl text-gray-600 mb-8">
-                Drivers call one number. AI answers 24/7, understands the problem, and dispatches help automatically.
+                Smart matching connects drivers with the best service providers in seconds based on location, ratings, and availability.
               </p>
               <ul className="space-y-4">
                 <li className="flex items-start">
                   <span className="text-blue-600 mr-3 text-xl">✓</span>
                   <div>
-                    <strong className="text-gray-900">Natural Conversation</strong>
-                    <p className="text-gray-600">AI speaks naturally with drivers, asking clarifying questions as needed</p>
+                    <strong className="text-gray-900">Smart Matching</strong>
+                    <p className="text-gray-600">AI considers distance, ratings, specialization, and real-time availability</p>
                   </div>
                 </li>
                 <li className="flex items-start">
                   <span className="text-blue-600 mr-3 text-xl">✓</span>
                   <div>
-                    <strong className="text-gray-900">Instant Transcription</strong>
-                    <p className="text-gray-600">Every call is transcribed and summarized with key details extracted automatically</p>
+                    <strong className="text-gray-900">Instant Notifications</strong>
+                    <p className="text-gray-600">Service providers receive offers immediately via mobile app</p>
                   </div>
                 </li>
                 <li className="flex items-start">
                   <span className="text-blue-600 mr-3 text-xl">✓</span>
                   <div>
-                    <strong className="text-gray-900">Auto-Dispatch</strong>
-                    <p className="text-gray-600">System finds and alerts qualified providers while driver is still on the call</p>
+                    <strong className="text-gray-900">Automatic Escalation</strong>
+                    <p className="text-gray-600">If no response, system automatically expands search radius</p>
                   </div>
                 </li>
               </ul>
             </div>
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1200&auto=format&fit=crop&q=80" 
-                alt="AI Call Center System"
+                src="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=1200&auto=format&fit=crop&q=80" 
+                alt="AI Dispatch System"
                 className="rounded-2xl shadow-2xl"
               />
             </div>
@@ -308,7 +305,7 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div className="order-2 md:order-1 relative">
               <img 
-                src="/vehicletrack.jpg" 
+                src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200&auto=format&fit=crop&q=80" 
                 alt="GPS Tracking Map"
                 className="rounded-2xl shadow-2xl"
               />
@@ -354,39 +351,39 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                Smart Provider Matching
+                AI Voice Integration
               </h2>
               <p className="text-xl text-gray-600 mb-8">
-                AI instantly finds qualified mechanics and tow companies near the breakdown location and sends job offers.
+                Drivers call in and AI automatically transcribes, categorizes, and creates incidents with all details.
               </p>
               <ul className="space-y-4">
                 <li className="flex items-start">
                   <span className="text-purple-600 mr-3 text-xl">✓</span>
                   <div>
-                    <strong className="text-gray-900">Location-Based Search</strong>
-                    <p className="text-gray-600">Finds providers within radius of breakdown, prioritizing closest first</p>
+                    <strong className="text-gray-900">Speech-to-Text</strong>
+                    <p className="text-gray-600">Accurate transcription of driver calls with 98% accuracy</p>
                   </div>
                 </li>
                 <li className="flex items-start">
                   <span className="text-purple-600 mr-3 text-xl">✓</span>
                   <div>
-                    <strong className="text-gray-900">Qualification Matching</strong>
-                    <p className="text-gray-600">Only alerts providers qualified for the specific issue (tire, engine, tow, etc.)</p>
+                    <strong className="text-gray-900">AI Summarization</strong>
+                    <p className="text-gray-600">Automatically extracts key details: location, issue type, urgency</p>
                   </div>
                 </li>
                 <li className="flex items-start">
                   <span className="text-purple-600 mr-3 text-xl">✓</span>
                   <div>
-                    <strong className="text-gray-900">Instant Job Offers</strong>
-                    <p className="text-gray-600">Providers receive push notifications and can accept with one tap, setting their ETA</p>
+                    <strong className="text-gray-900">Instant Incident Creation</strong>
+                    <p className="text-gray-600">No manual data entry - incidents created automatically from calls</p>
                   </div>
                 </li>
               </ul>
             </div>
             <div className="relative">
               <img 
-                src="https://images.pexels.com/photos/1252500/pexels-photo-1252500.jpeg?auto=compress&cs=tinysrgb&w=1200" 
-                alt="GPS Smart Matching System"
+                src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&auto=format&fit=crop&q=80" 
+                alt="Voice Integration"
                 className="rounded-2xl shadow-2xl"
               />
             </div>
@@ -407,49 +404,49 @@ export default function LandingPage() {
             <Card className="p-8 text-center bg-white">
               <div className="relative mb-6">
                 <img 
-                  src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&auto=format&fit=crop&q=80" 
-                  alt="Driver Making Phone Call"
+                  src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&auto=format&fit=crop&q=80" 
+                  alt="Driver Reports"
                   className="w-full h-48 object-cover rounded-xl mb-4"
                 />
                 <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg">
                   1
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3 mt-8">Driver Calls In</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 mt-8">Driver Reports</h3>
               <p className="text-gray-600">
-                Driver calls your roadside number. AI answers, transcribes the call, and extracts location, truck details, and issue type.
+                Driver uses mobile app or calls dispatch. AI captures location, truck details, and issue type automatically.
               </p>
             </Card>
             <Card className="p-8 text-center bg-white">
               <div className="relative mb-6">
                 <img 
-                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&auto=format&fit=crop&q=80" 
-                  alt="AI Matching System"
+                  src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&auto=format&fit=crop&q=80" 
+                  alt="AI Matches Provider"
                   className="w-full h-48 object-cover rounded-xl mb-4"
                 />
                 <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg">
                   2
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3 mt-8">AI Finds Help</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 mt-8">AI Matches Provider</h3>
               <p className="text-gray-600">
-                System finds the nearest qualified mechanic or tow company and sends them a job offer with all details and location.
+                Our AI instantly finds qualified service providers nearby and sends offers based on ratings and availability.
               </p>
             </Card>
             <Card className="p-8 text-center bg-white">
               <div className="relative mb-6">
                 <img 
-                  src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=600&auto=format&fit=crop&q=80" 
-                  alt="Vehicle Mechanic Working"
+                  src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&auto=format&fit=crop&q=80" 
+                  alt="Track and Resolve"
                   className="w-full h-48 object-cover rounded-xl mb-4"
                 />
                 <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg">
                   3
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3 mt-8">Provider Accepts & Arrives</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 mt-8">Track & Resolve</h3>
               <p className="text-gray-600">
-                Provider accepts the job, sets ETA, and heads to location. Driver and dispatch track progress in real-time until resolved.
+                Dispatch monitors real-time progress. Service is completed, documented, and automatically billed.
               </p>
             </Card>
           </div>
