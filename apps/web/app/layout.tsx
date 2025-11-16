@@ -3,14 +3,24 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/providers'
 import { Logo } from '@/components/logo'
+import PWARegister from '@/components/pwa-register'
 import Link from 'next/link'
 import { Toaster } from '@/components/ui/toaster'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'AI Roadcall Assistant',
-  description: 'AI-powered roadside assistance platform',
+  title: 'RoadCall - AI Roadside Assistance',
+  description: 'AI-powered roadside assistance platform. One call, instant help from qualified mechanics and tow companies.',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'RoadCall',
+  },
+  formatDetection: {
+    telephone: false,
+  },
 }
 
 export default function RootLayout({
@@ -21,10 +31,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="description" content="RoadCall - AI-powered roadside assistance. One call, instant help from qualified mechanics and tow companies." />
         <link rel="icon" href="/logo-triangle.svg" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={inter.className}>
         <Providers>
+          <PWARegister />
           <div className="min-h-screen flex flex-col">
             <header className="px-6 py-6 border-b border-neutral-800 sticky top-0 z-40 bg-black/90 backdrop-blur-md">
               {/* Hero-like gradient layers */}
