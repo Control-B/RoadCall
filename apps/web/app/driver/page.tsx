@@ -1,292 +1,179 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { apiClient } from '@/lib/api-client'
-import { Incident } from '@/types'
-import { getStatusColor, getStatusLabel, getIncidentTypeLabel } from '@/lib/utils'
-import { Clock, MapPin, Wrench, TrendingUp, Phone, FileText, Plus } from 'lucide-react'
+import { Phone, MapPin, Clock } from 'lucide-react'
 import { format } from 'date-fns'
 import Link from 'next/link'
 
 export default function DriverDashboard() {
-  const [incidents, setIncidents] = useState<Incident[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    loadIncidents()
-  }, [])
-
-  const loadIncidents = async () => {
-    try {
-      // Mock data for now - replace with actual API call
-      const mockIncidents: Incident[] = [
-        {
-          incidentId: '1',
-          driverId: 'driver-1',
-          type: 'tire',
-          status: 'in_progress',
-          location: { lat: 40.7128, lon: -74.0060, address: 'I-95 Mile Marker 120' },
-          createdAt: new Date().toISOString(),
-          assignedVendorName: "Mike's Towing"
-        },
-        {
-          incidentId: '2',
-          driverId: 'driver-1',
-          type: 'engine',
-          status: 'closed',
-          location: { lat: 40.7128, lon: -74.0060, address: 'I-80 Exit 45' },
-          createdAt: new Date(Date.now() - 86400000).toISOString(),
-          assignedVendorName: "Quick Fix Mechanics"
-        }
-      ]
-      setIncidents(mockIncidents)
-    } catch (error) {
-      console.error('Failed to load incidents:', error)
-    } finally {
-      setLoading(false)
-    }
+  // Mock active incident
+  const activeIncident = {
+    id: '1',
+    type: 'Tire Blowout',
+    location: 'I-95 Mile Marker 120, New Jersey',
+    eta: '12 min',
+    status: 'vendor_en_route' as const,
+    vendor: 'Mike\'s Towing Service',
+    vendorPhone: '+1-201-555-0123',
   }
 
-  const activeIncidents = incidents.filter(
-    (i) => !['closed', 'cancelled'].includes(i.status)
-  )
-
-  // Mock analytics data
-  const analytics = {
-    totalIncidents: 24,
-    avgResponseTime: '15 min',
-    totalCost: '$1,245',
-    thisMonth: 8
-  }
-
-  // Mock call transcripts/summaries
-  const callSummaries = [
+  // Mock recent incidents
+  const recentIncidents = [
     {
       id: '1',
+      type: 'Tire Blowout',
+      vendor: 'Mike\'s Towing',
       date: new Date(),
-      incidentType: 'Tire Blowout',
-      summary: 'Driver reported flat tire on I-95 northbound near mile marker 120. Urgent situation, blocking right lane. Dispatched tire service, ETA 15 minutes.',
-      sentiment: 'frustrated',
-      urgency: 'high',
-      duration: '3:45'
+      cost: '$85',
+      status: 'vendor_en_route' as const,
     },
     {
       id: '2',
+      type: 'Engine Overheating',
+      vendor: 'Quick Fix Mechanics',
       date: new Date(Date.now() - 86400000),
-      incidentType: 'Engine Overheating',
-      summary: 'Engine temperature warning light came on. Driver pulled over at rest stop. Mechanic dispatched to check coolant levels and diagnose issue.',
-      sentiment: 'calm',
-      urgency: 'medium',
-      duration: '2:20'
+      cost: '$150',
+      status: 'closed' as const,
     },
     {
       id: '3',
+      type: 'Jump Start',
+      vendor: 'Road Rescue',
       date: new Date(Date.now() - 172800000),
-      incidentType: 'Towing Request',
-      summary: 'Vehicle won\'t start after delivery. Battery appears dead. Tow truck dispatched to transport to nearest service center.',
-      sentiment: 'neutral',
-      urgency: 'medium',
-      duration: '4:10'
-    }
+      cost: '$45',
+      status: 'closed' as const,
+    },
   ]
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    )
-  }
-
   return (
-    <div className="space-y-6">
-      {/* Header with Create Button */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight">Driver Dashboard</h2>
-          <p className="text-muted-foreground">
-            Track incidents, view analytics, and review call summaries
-          </p>
-        </div>
-        <Link href="/driver/create-incident">
-          <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-            <Plus className="w-5 h-5 mr-2" />
-            New Incident
+    <div className="space-y-4 md:space-y-6">
+      {/* Emergency Help Button - PROMINENT */}
+      <div className="md:hidden sticky top-16 z-40 bg-black pb-4 pt-2">
+        <Button 
+          size="lg"
+          className="w-full bg-red-600 hover:bg-red-700 text-white font-bold text-lg h-16 rounded-lg shadow-lg"
+        >
+          <Phone className="w-6 h-6 mr-3" />
+          Call for Help Now
+        </Button>
+      </div>
+
+      {/* Active Incident Card - Mobile Optimized */}
+      {activeIncident && (
+        <Card className="bg-gradient-to-br from-blue-600 to-blue-700 text-white border-0">
+          <CardContent className="p-6 space-y-4">
+            <div className="space-y-2">
+              <h3 className="text-lg font-bold">{activeIncident.type}</h3>
+              <div className="flex items-center gap-2 text-sm opacity-90">
+                <MapPin className="w-4 h-4 flex-shrink-0" />
+                <span>{activeIncident.location}</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-white/20 rounded-lg p-3">
+                <p className="text-xs opacity-80">ETA</p>
+                <p className="text-2xl font-bold">{activeIncident.eta}</p>
+              </div>
+              <div className="bg-white/20 rounded-lg p-3">
+                <p className="text-xs opacity-80">Status</p>
+                <p className="text-lg font-bold capitalize">{activeIncident.status.replace('_', ' ')}</p>
+              </div>
+            </div>
+
+            <div className="bg-white/10 rounded-lg p-3">
+              <p className="text-xs opacity-80 mb-1">Service Provider</p>
+              <p className="font-bold mb-2">{activeIncident.vendor}</p>
+              <Button 
+                size="sm"
+                className="w-full bg-white text-blue-600 hover:bg-gray-100 font-bold"
+                onClick={() => window.location.href = `tel:${activeIncident.vendorPhone}`}
+              >
+                <Phone className="w-4 h-4 mr-2" />
+                Call Provider
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Stats Grid - Mobile Optimized */}
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+        <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white border-0">
+          <CardContent className="p-4 md:p-6">
+            <p className="text-xs md:text-sm opacity-90 mb-1">Total Incidents</p>
+            <p className="text-2xl md:text-3xl font-bold">24</p>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white border-0">
+          <CardContent className="p-4 md:p-6">
+            <p className="text-xs md:text-sm opacity-90 mb-1">Avg Response</p>
+            <p className="text-2xl md:text-3xl font-bold">15 min</p>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white border-0">
+          <CardContent className="p-4 md:p-6">
+            <p className="text-xs md:text-sm opacity-90 mb-1">This Month</p>
+            <p className="text-2xl md:text-3xl font-bold">8</p>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white border-0">
+          <CardContent className="p-4 md:p-6">
+            <p className="text-xs md:text-sm opacity-90 mb-1">Total Cost</p>
+            <p className="text-2xl md:text-3xl font-bold">$1.2K</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Recent Incidents - Mobile Optimized */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg md:text-xl">Recent Incidents</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          {recentIncidents.map((incident) => (
+            <Link key={incident.id} href={`/driver/incidents/${incident.id}`}>
+              <div className="p-3 md:p-4 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-sm md:text-base">{incident.type}</h4>
+                    <p className="text-xs md:text-sm text-gray-500">{incident.vendor}</p>
+                  </div>
+                  <Badge 
+                    className={incident.status === 'closed' ? 'bg-green-600' : 'bg-blue-600'}
+                  >
+                    {incident.status === 'closed' ? 'Done' : 'Active'}
+                  </Badge>
+                </div>
+                <div className="flex items-center justify-between text-xs md:text-sm text-gray-600">
+                  <span>{format(incident.date, 'MMM d, h:mm a')}</span>
+                  <span className="font-bold">{incident.cost}</span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </CardContent>
+      </Card>
+
+      {/* Quick Links - Mobile Optimized */}
+      <div className="grid grid-cols-2 gap-2 md:gap-3">
+        <Link href="/driver/find-help" className="w-full">
+          <Button variant="outline" className="w-full h-12 md:h-14">
+            <MapPin className="w-4 h-4 mr-2" />
+            <span className="text-sm md:text-base">Find Help</span>
           </Button>
         </Link>
-      </div>
-
-      {/* Two Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
-        {/* Left Column: Analytics */}
-        <div className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
-            {/* Total Incidents - Blue */}
-            <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white border-0">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <TrendingUp className="w-8 h-8 opacity-80" />
-                </div>
-                <p className="text-sm opacity-90 mb-1">Total Incidents</p>
-                <p className="text-4xl font-bold mb-1">{analytics.totalIncidents}</p>
-                <p className="text-xs opacity-80">↑ {analytics.thisMonth} this month</p>
-              </CardContent>
-            </Card>
-
-            {/* Avg Response - Green */}
-            <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white border-0">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <Clock className="w-8 h-8 opacity-80" />
-                </div>
-                <p className="text-sm opacity-90 mb-1">Avg Response</p>
-                <p className="text-4xl font-bold mb-1">{analytics.avgResponseTime}</p>
-                <p className="text-xs opacity-80">↓ 5% faster</p>
-              </CardContent>
-            </Card>
-
-            {/* Total Cost - Purple */}
-            <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white border-0">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-2xl opacity-80">💰</span>
-                </div>
-                <p className="text-sm opacity-90 mb-1">Total Cost</p>
-                <p className="text-4xl font-bold mb-1">{analytics.totalCost}</p>
-                <p className="text-xs opacity-80">Last 30 days</p>
-              </CardContent>
-            </Card>
-
-            {/* Active Now - Orange */}
-            <Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white border-0">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <Wrench className="w-8 h-8 opacity-80" />
-                </div>
-                <p className="text-sm opacity-90 mb-1">Active Now</p>
-                <p className="text-4xl font-bold mb-1">{activeIncidents.length}</p>
-                <p className="text-xs opacity-80">In progress</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Active Incidents */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Wrench className="w-5 h-5" />
-                <span>Active Incidents</span>
-              </CardTitle>
-              <CardDescription>Currently in progress</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {activeIncidents.length === 0 ? (
-                <p className="text-center text-muted-foreground py-8">No active incidents</p>
-              ) : (
-                activeIncidents.map((incident) => (
-                  <Link key={incident.incidentId} href={`/driver/incidents/${incident.incidentId}`}>
-                    <div className="p-4 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
-                      <div className="flex items-start justify-between mb-2">
-                        <div className="flex items-center space-x-2">
-                          <Wrench className="w-4 h-4 text-blue-600" />
-                          <span className="font-semibold">{getIncidentTypeLabel(incident.type)}</span>
-                        </div>
-                        <Badge className={getStatusColor(incident.status)}>
-                          {getStatusLabel(incident.status)}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center text-sm text-muted-foreground mb-1">
-                        <MapPin className="w-3 h-3 mr-1" />
-                        {incident.location.address}
-                      </div>
-                      {incident.assignedVendorName && (
-                        <div className="flex items-center text-sm text-muted-foreground">
-                          <Clock className="w-3 h-3 mr-1" />
-                          Vendor: {incident.assignedVendorName}
-                        </div>
-                      )}
-                    </div>
-                  </Link>
-                ))
-              )}
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Right Column: Call Transcripts/Summaries */}
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Phone className="w-5 h-5" />
-                <span>Call Summaries</span>
-              </CardTitle>
-              <CardDescription>AI-generated summaries of your calls</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {callSummaries.map((call, index) => {
-                const borderColors = ['border-blue-500', 'border-purple-500', 'border-green-500']
-                const bgColors = ['bg-blue-50', 'bg-purple-50', 'bg-green-50']
-                return (
-                  <div key={call.id} className={`border-l-4 ${borderColors[index % 3]} ${bgColors[index % 3]} pl-4 py-3 rounded-r-lg`}>
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h4 className="font-semibold text-sm">{call.incidentType}</h4>
-                        <p className="text-xs text-muted-foreground">
-                          {format(call.date, 'MMM d, yyyy h:mm a')} • {call.duration}
-                        </p>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Badge variant={call.urgency === 'high' ? 'destructive' : 'secondary'} className={
-                          call.urgency === 'high' ? 'bg-red-500' : 'bg-amber-500 text-white'
-                        }>
-                          {call.urgency}
-                        </Badge>
-                        <Badge variant="outline" className={
-                          call.sentiment === 'frustrated' ? 'border-red-400 bg-red-50 text-red-700' :
-                          call.sentiment === 'calm' ? 'border-green-400 bg-green-50 text-green-700' :
-                          'border-gray-400 bg-gray-50 text-gray-700'
-                        }>
-                          {call.sentiment === 'frustrated' ? '😟' : call.sentiment === 'calm' ? '😊' : '😐'}
-                        </Badge>
-                      </div>
-                    </div>
-                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
-                      {call.summary}
-                    </p>
-                    <Button variant="ghost" size="sm" className="text-xs hover:bg-white/50">
-                      <FileText className="w-3 h-3 mr-1" />
-                      View Full Transcript
-                    </Button>
-                  </div>
-                )
-              })}
-            </CardContent>
-          </Card>
-
-          {/* Quick Actions */}
-          <Card className="bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200">
-            <CardHeader>
-              <CardTitle className="text-gray-900">Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Link href="/driver/incidents">
-                <Button variant="outline" className="w-full justify-start bg-white hover:bg-gray-50">
-                  <Wrench className="w-4 h-4 mr-2 text-blue-600" />
-                  View All Incidents
-                </Button>
-              </Link>
-              <Button variant="outline" className="w-full justify-start bg-white hover:bg-gray-50">
-                <Phone className="w-4 h-4 mr-2 text-green-600" />
-                Call Dispatch Center
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+        <Link href="/driver/track" className="w-full">
+          <Button variant="outline" className="w-full h-12 md:h-14">
+            <Clock className="w-4 h-4 mr-2" />
+            <span className="text-sm md:text-base">Track Service</span>
+          </Button>
+        </Link>
       </div>
     </div>
   )
