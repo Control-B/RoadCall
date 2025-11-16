@@ -6,44 +6,9 @@ import { Card } from '@/components/ui/card';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navigation - Dark & Sticky */}
-      <nav className="border-b border-white/10 bg-black backdrop-blur-md sticky top-0 z-50 relative">
-        {/* Same gradient background as hero */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-purple-600/20 to-pink-600/20"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]"></div>
-        
-        <div className="container mx-auto px-6 py-4 relative z-10">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="relative w-8 h-8">
-                <div className="absolute inset-0 bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 opacity-80 blur-sm" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}></div>
-                <div className="absolute inset-0 bg-gradient-to-br from-yellow-300 to-orange-400 flex items-center justify-center" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}>
-                  <span className="text-xs font-bold text-gray-900 mt-1">AI</span>
-                </div>
-              </div>
-              <span className="text-2xl font-bold text-white">RoadCall</span>
-            </Link>
-            <div className="hidden md:flex space-x-8 text-base">
-              <Link href="#platform" className="text-gray-300 hover:text-white font-semibold transition-colors">Platform</Link>
-              <Link href="#features" className="text-gray-300 hover:text-white font-semibold transition-colors">Features</Link>
-              <Link href="#pricing" className="text-gray-300 hover:text-white font-semibold transition-colors">Pricing</Link>
-              <Link href="#customers" className="text-gray-300 hover:text-white font-semibold transition-colors">Customers</Link>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Link href="/auth/login">
-                <Button variant="ghost" size="default" className="text-base text-gray-300 hover:text-white hover:bg-white/10">Sign in</Button>
-              </Link>
-              <Link href="/contact">
-                <Button size="default" className="bg-white text-black hover:bg-gray-100 text-base font-semibold">Contact sales</Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+    <div className="bg-white">
       {/* Hero Section - Stability.ai Style */}
-      <section className="relative overflow-hidden bg-black text-white py-16 md:py-24">
+      <section className="relative overflow-hidden bg-black text-white pt-20 pb-16 md:pt-24 md:pb-24">
         {/* Animated gradient background */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-purple-600/20 to-pink-600/20"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]"></div>
@@ -689,63 +654,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-16">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-5 gap-8 mb-12">
-            <div className="md:col-span-2">
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <span className="text-xl">🚛</span>
-                </div>
-                <span className="text-xl font-bold text-white">RoadCall</span>
-              </div>
-              <p className="text-sm mb-6 max-w-sm">
-                AI-powered roadside assistance platform for trucking companies. Keep your fleet moving 24/7.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-white font-semibold mb-4 text-sm">Product</h3>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="#features" className="hover:text-white">Features</Link></li>
-                <li><Link href="#pricing" className="hover:text-white">Pricing</Link></li>
-                <li><Link href="#" className="hover:text-white">API</Link></li>
-                <li><Link href="#" className="hover:text-white">Mobile App</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-white font-semibold mb-4 text-sm">Company</h3>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/about" className="hover:text-white">About</Link></li>
-                <li><Link href="/blog" className="hover:text-white">Blog</Link></li>
-                <li><Link href="/careers" className="hover:text-white">Careers</Link></li>
-                <li><Link href="/press" className="hover:text-white">Press</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-white font-semibold mb-4 text-sm">Support</h3>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/help" className="hover:text-white">Help Center</Link></li>
-                <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
-                <li><Link href="/status" className="hover:text-white">Status</Link></li>
-                <li><Link href="/docs" className="hover:text-white">Docs</Link></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
-            <div>© 2025 RoadCall, Inc. All rights reserved.</div>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link href="/privacy" className="hover:text-white">Privacy</Link>
-              <Link href="/terms" className="hover:text-white">Terms</Link>
-              <Link href="/security" className="hover:text-white">Security</Link>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
